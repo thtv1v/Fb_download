@@ -1,40 +1,35 @@
 const $ = id => document.getElementById(id);
-const FB_REGEX = /^(https?:\/\/)?(www\.)?(facebook\.com|fb\.watch)\//i;
+const FB_REGEX = /facebook\.com|fb\.watch/;
 
-function toast(msg) {
-  const t = $('toast');
-  t.textContent = msg;
-  t.classList.add('show');
-  setTimeout(() => t.classList.remove('show'), 2000);
-}
+const API_ENDPOINT = "/.netlify/functions/fb";
 
 $('fetch').onclick = async () => {
-  const url = $('url').value.trim();
-  $('error').textContent = '';
+  const btn = $('fetch');
+  btn.disabled = true;
+  btn.classList.add('loading');
 
+  $('error').textContent = '';
+  $('result').classList.add('hide');
+  $('progress').style.width = '0%';
+  $('progressBox').classList.add('hide');
+
+  const url = $('url').value.trim();
   if (!FB_REGEX.test(url)) {
-    $('error').textContent = 'Link Facebook không hợp lệ';
-    $('url').classList.add('shake');
-    setTimeout(() => $('url').classList.remove('shake'), 300);
+    showError('Link Facebook không hợp lệ');
+    resetBtn();
     return;
   }
 
-  $('fetch').disabled = true;
-  $('overlay').classList.remove('hide');
-  $('progressBox').classList.add('hide');
-  $('result').classList.add('hide');
-
-  const controller = new AbortController();
-  const timeout = setTimeout(() => controller.abort(), 15000);
-
   try {
-    const res = await fetch(`/api/fb?url=${encodeURIComponent(url)}`, {
-      signal: controller.signal
-    });
-    const data = await res.json();
+    showProgress();
 
+    const res = await fetch(`${API_ENDPOINT}?url=${encodeURIComponent(url)}`);
+    if (!res.ok) throw new Error("API lỗi");
+
+    const data = await res.json();
     if (!data.success) {
-      $('error').textContent = data.message;
+      showError(data.message);
+      resetBtn();
       return;
     }
 
@@ -45,61 +40,48 @@ $('fetch').onclick = async () => {
 
     data.sources.forEach(v => {
       const b = document.createElement('button');
-      b.textContent = `Tải ${v.quality}`;
+      b.textContent = v.quality;
       b.onclick = () => download(v.url, v.quality);
       $('qualities').appendChild(b);
     });
 
     $('result').classList.remove('hide');
-    $('result').classList.add('fade-up');
-    toast('✔ Lấy video thành công');
+    finishProgress();
   } catch (e) {
-    $('error').textContent =
-      e.name === 'AbortError'
-        ? '⏳ Kết nối quá lâu'
-        : '⚠️ Lỗi mạng';
-  } finally {
-    clearTimeout(timeout);
-    $('fetch').disabled = false;
-    $('overlay').classList.add('hide');
+    showError('Không kết nối được server');
   }
+
+  resetBtn();
 };
 
 function download(url, q) {
-  $('progressBox').classList.remove('hide');
-  $('progress').style.width = '30%';
-
   const a = document.createElement('a');
   a.href = url;
   a.download = `fb_${q}.mp4`;
   document.body.appendChild(a);
   a.click();
   a.remove();
-
-  setTimeout(() => $('progress').style.width = '100%', 400);
-  toast(`⬇ Đang tải ${q}`);
-      }    if (xhr.status === 200) {
-      const a = document.createElement("a");
-      a.href = URL.createObjectURL(xhr.response);
-      a.download = "video.mp4";
-      a.click();
-      document.getElementById("progressText").innerText = "Hoàn thành";
-    }
-  };
-
-  xhr.onerror = () => {
-    document.getElementById("progressText").innerText = "Lỗi tải";
-  };
-
-  xhr.send();
 }
-function download(url, q) {
+
+function showProgress() {
   $('progressBox').classList.remove('hide');
-  const a = document.createElement('a');
-  a.href = url;
-  a.download = `fb_${q}.mp4`;
-  document.body.appendChild(a);
-  a.click();
-  a.remove();
-  setTimeout(() => $('progress').style.width = '100%', 500);
-      }
+  let w = 10;
+  const i = setInterval(() => {
+    if (w >= 80) return clearInterval(i);
+    w += 10;
+    $('progress').style.width = w + '%';
+  }, 200);
+}
+
+function finishProgress() {
+  $('progress').style.width = '100%';
+}
+
+function showError(msg) {
+  $('error').textContent = msg;
+}
+
+function resetBtn() {
+  $('fetch').disabled = false;
+  $('fetch').classList.remove('loading');
+}
