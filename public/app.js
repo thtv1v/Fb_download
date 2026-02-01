@@ -1,40 +1,64 @@
-const $ = id => document.getElementById(id);
-const FB_REGEX = /facebook\.com|fb\.watch/;
-
-const API_ENDPOINT = "/.netlify/functions/fb";
+const $ = i => document.getElementById(i);
+const API = "/.netlify/functions/fb";
 
 $('fetch').onclick = async () => {
   const btn = $('fetch');
-  btn.disabled = true;
   btn.classList.add('loading');
+  btn.disabled = true;
 
-  $('error').textContent = '';
+  $('toast').textContent = '';
   $('result').classList.add('hide');
-  $('progress').style.width = '0%';
-  $('progressBox').classList.add('hide');
+  $('progressBox').classList.remove('hide');
+  $('progress').style.width = '10%';
 
   const url = $('url').value.trim();
-  if (!FB_REGEX.test(url)) {
-    showError('Link Facebook không hợp lệ');
-    resetBtn();
-    return;
-  }
+  if (!url) return fail("Chưa nhập link");
 
   try {
-    showProgress();
+    fakeProgress();
 
-    const res = await fetch(`${API_ENDPOINT}?url=${encodeURIComponent(url)}`);
-    if (!res.ok) throw new Error("API lỗi");
+    const r = await fetch(`${API}?url=${encodeURIComponent(url)}`);
+    const j = await r.json();
 
-    const data = await res.json();
-    if (!data.success) {
-      showError(data.message);
-      resetBtn();
-      return;
-    }
+    if (!j.success) return fail(j.message);
 
-    $('thumb').src = data.thumbnail;
-    $('title').textContent = data.title || 'Facebook Video';
+    $('thumb').src = j.thumbnail;
+    $('title').textContent = j.title;
+    $('duration').textContent = j.duration || '';
+
+    $('qualities').innerHTML = '';
+    j.sources.forEach(v => {
+      const b = document.createElement('button');
+      b.textContent = v.quality;
+      b.onclick = () => location.href = v.url;
+      $('qualities').appendChild(b);
+    });
+
+    $('progress').style.width = '100%';
+    $('result').classList.remove('hide');
+  } catch {
+    fail("Không kết nối được server");
+  }
+
+  btn.classList.remove('loading');
+  btn.disabled = false;
+};
+
+function fakeProgress(){
+  let p = 10;
+  const i = setInterval(()=>{
+    if(p>=85) return clearInterval(i);
+    p+=10;
+    $('progress').style.width = p+'%';
+  },200);
+}
+
+function fail(msg){
+  $('toast').textContent = msg;
+  $('progressBox').classList.add('hide');
+  $('fetch').classList.remove('loading');
+  $('fetch').disabled = false;
+}    $('title').textContent = data.title || 'Facebook Video';
     $('duration').textContent = data.duration || '';
     $('qualities').innerHTML = '';
 
