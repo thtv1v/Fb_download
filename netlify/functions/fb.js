@@ -1,40 +1,48 @@
 import fetch from "node-fetch";
 
-const APIS = [
+const SOURCES = [
   url => `https://fdownloader.net/api/ajaxSearch?query=${url}`,
-  url => `https://snapvideo.io/api/ajaxSearch?query=${url}`
+  url => `https://snapvideo.io/api/ajaxSearch?query=${url}`,
+  url => `https://getfvid.com/api/ajaxSearch?query=${url}`
 ];
 
 export const handler = async (event) => {
   const url = event.queryStringParameters?.url;
+  if (!url) return res(false,"Thiếu link");
 
-  if (!url || !/^https?:\/\//i.test(url)) {
-    return {
-      statusCode: 200,
-      body: JSON.stringify({ success: false, message: "Link không hợp lệ" })
-    };
-  }
-
-  for (const api of APIS) {
+  for (const api of SOURCES) {
     try {
-      const r = await fetch(api(encodeURIComponent(url)));
+      const ctrl = new AbortController();
+      setTimeout(()=>ctrl.abort(),7000);
+
+      const r = await fetch(api(encodeURIComponent(url)),{signal:ctrl.signal});
       const j = await r.json();
 
-      if (j?.data && Array.isArray(j.medias)) {
-        return {
-          statusCode: 200,
-          body: JSON.stringify({
-            success: true,
-            title: j.title,
-            thumbnail: j.thumbnail,
-            duration: j.duration,
-            sources: j.medias.map(m => ({
-              quality: m.quality,
-              url: m.url
-            }))
-          })
-        };
+      if (j?.medias?.length) {
+        return ok({
+          success:true,
+          title:j.title,
+          thumbnail:j.thumbnail,
+          duration:j.duration,
+          sources:j.medias.map(m=>({
+            quality:m.quality,
+            url:m.url
+          }))
+        });
       }
+    } catch {}
+  }
+
+  return res(false,"Video riêng tư / FB chặn / link lỗi");
+};
+
+const ok = body => ({
+  statusCode:200,
+  headers:{ "Access-Control-Allow-Origin":"*" },
+  body:JSON.stringify(body)
+});
+
+const res = (s,m)=>ok({success:s,message:m});      }
     } catch (e) {
       console.error("API error:", e.message);
     }
