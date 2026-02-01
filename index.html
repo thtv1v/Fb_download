@@ -2,30 +2,92 @@
 <html lang="vi">
 <head>
   <meta charset="UTF-8">
-  <title>Video Downloader</title>
+  <title>Video Downloader Tool</title>
+
+  <!-- SEO / META -->
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content="Web phân tích và tải video qua API trung gian">
+
+  <!-- STYLE -->
   <link rel="stylesheet" href="assets/css/style.css">
 </head>
+
 <body>
 
-<div class="app">
-  <h2>Video Downloader</h2>
+<!-- ================= HEADER ================= -->
+<header class="app-header">
+  <h1>Video Downloader</h1>
+  <p class="subtitle">
+    Phân tích & tải video thông qua API trung gian
+  </p>
+</header>
 
-  <div class="input-box">
-    <input id="videoUrl" type="text" placeholder="Dán link video Facebook">
-    <button id="analyzeBtn">Phân tích</button>
-  </div>
+<!-- ================= MAIN ================= -->
+<main class="app-container" role="main">
 
-  <div id="toast"></div>
+  <!-- INPUT SECTION -->
+  <section class="input-section" aria-label="Input video link">
+    <label for="videoUrl">Link video</label>
 
-  <div id="progress">
-    <div id="progressBar"></div>
-  </div>
+    <div class="input-box">
+      <input
+        id="videoUrl"
+        type="text"
+        placeholder="Dán link video Facebook tại đây"
+        aria-required="true"
+      >
+      <button id="analyzeBtn" aria-label="Phân tích video">
+        Phân tích
+      </button>
+    </div>
 
-  <div id="result"></div>
-</div>
+    <small class="hint">
+      Hỗ trợ video public. Độ phân giải &lt; 1028px.
+    </small>
+  </section>
 
+  <!-- PROGRESS -->
+  <section class="progress-section" aria-live="polite">
+    <div id="progress">
+      <div id="progressBar"></div>
+    </div>
+  </section>
+
+  <!-- TOAST / NOTIFY -->
+  <section class="notify-section">
+    <div id="toast" role="alert"></div>
+  </section>
+
+  <!-- RESULT -->
+  <section class="result-section" aria-label="Kết quả phân tích">
+    <div id="result" class="result-empty">
+      <p>Chưa có dữ liệu. Hãy nhập link và nhấn Phân tích.</p>
+    </div>
+  </section>
+
+  <!-- HELP -->
+  <section class="help-section">
+    <h3>Hướng dẫn</h3>
+    <ul>
+      <li>Dán link video hợp lệ</li>
+      <li>Chờ hệ thống phân tích</li>
+      <li>Chọn chất lượng phù hợp để tải</li>
+    </ul>
+  </section>
+
+</main>
+
+<!-- ================= FOOTER ================= -->
+<footer class="app-footer">
+  <p>
+    © 2026 Video Tool · Demo kỹ thuật
+  </p>
+</footer>
+
+<!-- ================= SCRIPT ================= -->
 <script src="assets/js/ui.js"></script>
 <script src="assets/js/api-engine.js"></script>
 <script src="assets/js/core.js"></script>
+
 </body>
-  </html>
+</html>
