@@ -1,40 +1,38 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>FB Video Downloader</title>
-  <link rel="stylesheet" href="style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FB Video Downloader PRO</title>
+<link rel="stylesheet" href="style.css">
 </head>
 <body>
 
-<div class="app">
-  <h1>Facebook Video Downloader</h1>
+<div class="bg"></div>
 
-  <input id="url" placeholder="Dán link Facebook vào đây" />
-  <button id="fetch">LẤY VIDEO</button>
+<div class="app glass">
+  <h1 class="neon">FB VIDEO DOWNLOADER</h1>
 
-  <div id="error"></div>
+  <input id="url" placeholder="Dán link Facebook vào đây..." />
+
+  <button id="fetch">
+    <span class="btn-text">LẤY VIDEO</span>
+    <span class="spinner"></span>
+  </button>
+
+  <div id="toast"></div>
 
   <div id="progressBox" class="hide">
     <div id="progress"></div>
   </div>
 
-  <div id="result" class="hide">
+  <div id="result" class="hide scale-in">
     <img id="thumb">
-    <h3 id="title"></h3>
+    <h2 id="title"></h2>
     <p id="duration"></p>
     <div id="qualities"></div>
   </div>
 </div>
-
-<!-- Overlay loading -->
-<div id="overlay" class="hide">
-  <div class="spinner"></div>
-</div>
-
-<!-- Toast -->
-<div id="toast"></div>
 
 <script src="app.js"></script>
 </body>
