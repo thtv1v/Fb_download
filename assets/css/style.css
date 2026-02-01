@@ -1,0 +1,161 @@
+/* ================= RESET ================= */
+* {
+  box-sizing: border-box;
+  margin: 0;
+  padding: 0;
+}
+
+/* ================= BODY ================= */
+body {
+  background: #0f172a;
+  font-family: Arial, Helvetica, sans-serif;
+  color: #e5e7eb;
+  line-height: 1.5;
+}
+
+/* ================= HEADER ================= */
+.app-header {
+  text-align: center;
+  padding: 24px 10px;
+}
+
+.app-header h1 {
+  font-size: 26px;
+  margin-bottom: 6px;
+}
+
+.subtitle {
+  font-size: 14px;
+  color: #94a3b8;
+}
+
+/* ================= MAIN CONTAINER ================= */
+.app-container {
+  width: 420px;
+  margin: 0 auto;
+  background: #020617;
+  padding: 20px;
+  border-radius: 10px;
+}
+
+/* ================= INPUT ================= */
+.input-section label {
+  font-size: 14px;
+  display: block;
+  margin-bottom: 4px;
+}
+
+.input-box {
+  display: flex;
+  gap: 8px;
+}
+
+input {
+  flex: 1;
+  padding: 8px;
+  border-radius: 4px;
+  border: none;
+}
+
+button {
+  padding: 8px 14px;
+  cursor: pointer;
+  background: #22c55e;
+  border: none;
+  border-radius: 4px;
+  color: #020617;
+}
+
+button:hover {
+  opacity: 0.9;
+}
+
+.hint {
+  display: block;
+  margin-top: 6px;
+  font-size: 12px;
+  color: #94a3b8;
+}
+
+/* ================= PROGRESS ================= */
+.progress-section {
+  margin-top: 12px;
+}
+
+#progress {
+  height: 6px;
+  background: #1e293b;
+  display: none;
+  border-radius: 4px;
+}
+
+#progressBar {
+  height: 100%;
+  width: 0%;
+  background: #22c55e;
+  transition: width 0.3s;
+}
+
+/* ================= TOAST ================= */
+.notify-section {
+  margin-top: 10px;
+}
+
+.toast {
+  font-size: 14px;
+  padding: 6px;
+}
+
+/* ================= RESULT ================= */
+.result-section {
+  margin-top: 16px;
+}
+
+.result-empty {
+  font-size: 14px;
+  color: #94a3b8;
+  text-align: center;
+}
+
+.video-card img {
+  width: 100%;
+  margin-top: 10px;
+  border-radius: 6px;
+}
+
+.video-card h3 {
+  margin-top: 8px;
+  font-size: 16px;
+}
+
+.video-card a {
+  display: block;
+  margin-top: 6px;
+  color: #22c55e;
+  text-decoration: none;
+}
+
+/* ================= HELP ================= */
+.help-section {
+  margin-top: 20px;
+  font-size: 13px;
+}
+
+.help-section ul {
+  margin-left: 16px;
+}
+
+/* ================= FOOTER ================= */
+.app-footer {
+  text-align: center;
+  font-size: 12px;
+  margin-top: 20px;
+  color: #64748b;
+}
+
+/* ================= RESPONSIVE ================= */
+@media (max-width: 480px) {
+  .app-container {
+    width: 95%;
+  }
+  }
