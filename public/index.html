@@ -1,32 +1,26 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8" />
-<meta name="viewport" content="width=device-width, initial-scale=1" />
-<title>FB Video Downloader</title>
-<link rel="stylesheet" href="style.css" />
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>FB Download</title>
+<style>
+body{font-family:sans-serif;padding:15px}
+button{padding:10px 15px}
+#bar{width:100%;background:#ddd;height:8px;margin-top:10px}
+#progress{width:0;height:8px;background:#4caf50}
+</style>
 </head>
-<body class="dark">
-  <div class="app">
-    <h1>FB Downloader</h1>
+<body>
 
-    <input id="url" placeholder="Dán link Facebook..." />
-    <button id="fetch">LẤY VIDEO</button>
+<input id="url" placeholder="Dán link Facebook" style="width:100%;padding:8px">
+<button id="fetch">Lấy video</button>
 
-    <div id="error"></div>
+<div id="result"></div>
 
-    <div id="result" class="hide">
-      <img id="thumb" />
-      <h2 id="title"></h2>
-      <p id="duration"></p>
-      <div id="qualities"></div>
-    </div>
+<div id="bar"><div id="progress"></div></div>
+<div id="progressText">0%</div>
 
-    <div id="progressBox" class="hide">
-      <div id="progress"></div>
-    </div>
-  </div>
-
-<script src="app.js"></script>
+<script src="script.js"></script>
 </body>
 </html>
